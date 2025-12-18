@@ -1,4 +1,5 @@
-from typing import Literal
+import threading
+import time
 from flask import Flask, request, jsonify, redirect
 import httpx
 
@@ -16,16 +17,33 @@ app = Flask(__name__)
 """
 
 
+def event_loop(sleep_time: float):
+    while True:
+        esp_data = get_esp32()
+        if esp_data[0]:
+            print(f"esp偵測成功, {sleep_time}後繼續")
+        else:
+            print(f"esp偵測失敗: {esp_data[1]}. {sleep_time}秒後重試")
+        time.sleep(sleep_time)
+
+
 def get_esp32() -> tuple[bool, str]:
-    """獲取 ESP32 資料"""
+    """
+    獲取 ESP32 資料
+
+    :return (success: bool, messagae: str)
+    """
     esp_url = "http://exp_esp32.test"
     with httpx.Client(timeout=5.0) as client:
-        req = client.get(esp_url)
-        if req.status_code == httpx.codes.OK:
-            ...  # 處理資料
-            return (True, "Ok")
-        else:
-            return (False, f"status_code = {req.status_code}")
+        try:
+            req = client.get(esp_url)
+            if req.status_code == httpx.codes.OK:
+                # 處理資料
+                return (True, "Ok")
+            else:
+                return (False, f"status_code -> {req.status_code}")
+        except Exception as e:
+            return (False, f"req_error -> {e}")
 
 
 # 發送東西
@@ -41,7 +59,10 @@ def hello_post():
     return f"ok{request.get_data()}"
 
 
-app.run(host="0.0.0.0", port=3000)  # 啟動用
+if __name__ == "__main__":
+    t = threading.Thread(target=event_loop, args=(15,), daemon=True)
+    t.start()
+    app.run(host="0.0.0.0", port=3000)
 
 
 """
