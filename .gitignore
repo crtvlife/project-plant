@@ -13,4 +13,5 @@ test/
 .env
 note.txt
 *.ino
+.code-workspace
 .venv
