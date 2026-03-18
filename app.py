@@ -5,6 +5,12 @@ import httpx
 
 
 app = Flask(__name__)
+global_datas = {
+    "lux": None,
+    "temp": None,
+    "humi": None,
+}
+
 """
     TODO:
     1. 主統輪尋 GET ESP32 (30s)並暫存資料
@@ -57,7 +63,10 @@ def hello():
 def hello_post():
 
     return f"ok{request.get_data()}"
-
+    
+@app.route("/data", methods=["GET"])
+def get_data():
+    return jsonify(global_datas)
 
 if __name__ == "__main__":
     t = threading.Thread(target=event_loop, args=(15,), daemon=True)
