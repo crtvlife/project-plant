@@ -53,9 +53,9 @@ def get_esp32() -> tuple[bool, str]:
 
 
 # 發送東西
-@app.route("/Hello", methods=["GET"])  # 網址列
+@app.route("/", methods=["GET"])  # 網址列
 def hello():
-    return "<H1>Hello word.</H1>"  # 輸出的內容
+    return '<H1>Hello word.</H1> <a href="./data">data</a><br /><a href="./post">to post</a>'  # 輸出的內容
 
 
 # 接收東西
@@ -63,10 +63,12 @@ def hello():
 def hello_post():
 
     return f"ok{request.get_data()}"
-    
+
+
 @app.route("/data", methods=["GET"])
 def get_data():
     return jsonify(global_datas)
+
 
 if __name__ == "__main__":
     t = threading.Thread(target=event_loop, args=(15,), daemon=True)
