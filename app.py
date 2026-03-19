@@ -2,7 +2,7 @@ import threading
 import time
 from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
-import httpx
+# import httpx
 
 
 app = Flask(__name__)
@@ -28,33 +28,33 @@ global_datas = {
 """
 
 
-def event_loop(sleep_time: float):
-    while True:
-        esp_data = get_esp32()
-        if esp_data[0]:
-            print(f"esp偵測成功, {sleep_time}後繼續")
-        else:
-            print(f"esp偵測失敗: {esp_data[1]}. {sleep_time}秒後重試")
-        time.sleep(sleep_time)
+# def event_loop(sleep_time: float):
+#     while True:
+#         esp_data = get_esp32()
+#         if esp_data[0]:
+#             print(f"esp偵測成功, {sleep_time}後繼續")
+#         else:
+#             print(f"esp偵測失敗: {esp_data[1]}. {sleep_time}秒後重試")
+#         time.sleep(sleep_time)
 
 
-def get_esp32() -> tuple[bool, str]:
-    """
-    獲取 ESP32 資料
+# def get_esp32() -> tuple[bool, str]:
+#     """
+#     獲取 ESP32 資料
 
-    :return (success: bool, messagae: str)
-    """
-    esp_url = "http://exp_esp32.test"
-    with httpx.Client(timeout=5.0) as client:
-        try:
-            req = client.get(esp_url)
-            if req.status_code == httpx.codes.OK:
-                # 處理資料
-                return (True, "Ok")
-            else:
-                return (False, f"status_code -> {req.status_code}")
-        except Exception as e:
-            return (False, f"req_error -> {e}")
+#     :return (success: bool, messagae: str)
+#     """
+#     esp_url = "http://exp_esp32.test"
+#     with httpx.Client(timeout=5.0) as client:
+#         try:
+#             req = client.get(esp_url)
+#             if req.status_code == httpx.codes.OK:
+#                 # 處理資料
+#                 return (True, "Ok")
+#             else:
+#                 return (False, f"status_code -> {req.status_code}")
+#         except Exception as e:
+#             return (False, f"req_error -> {e}")
 
 
 # 發送東西
