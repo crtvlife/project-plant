@@ -1,10 +1,15 @@
 import threading
 import time
 from flask import Flask, request, jsonify, redirect
+from flask_cors import CORS
 import httpx
 
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}}, 
+     allow_headers=["Content-Type"], 
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+
 global_datas = {
     "lux": None,
     "temp": None,
