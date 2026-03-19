@@ -61,9 +61,13 @@ def hello():
 # 接收東西
 @app.route("/post", methods=["POST"])  # 接收請求
 def hello_post():
-
+    global global_datas
+    tmp = dict(request.get_json())
+    global_datas["lux"] = tmp.get("lux", None)
+    global_datas["temp"] = tmp.get("temp", None)
+    global_datas["humi"] = tmp.get("humi", None)
     return f"ok{request.get_data()}"
-
+ 
 
 @app.route("/data", methods=["GET"])
 def get_data():
